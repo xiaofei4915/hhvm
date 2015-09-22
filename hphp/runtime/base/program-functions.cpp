@@ -406,6 +406,22 @@ void bump_counter_and_rethrow(bool isPsp) {
   }
 }
 
+static void handle_scriptabort_exception(ExecutionContext* context) {
+  Transport *transport = context->getTransport();
+  if (transport) {
+    Logger::Warning("Script aborted for connection to be closed: "
+      "User(%s:%d), request: %s, Server(%s:%d)",
+      transport->getRemoteAddr(),
+      transport->getRemotePort(),
+      context->getRequestUrl().c_str(),
+      transport->getServerAddr().c_str(),
+      transport->getServerPort());
+  } else {
+    Logger::Warning("Script aborted for connection to be closed: "
+      "request: %s", context->getRequestUrl().c_str());
+  }
+}
+
 static void handle_exception_helper(bool& ret,
                                     ExecutionContext* context,
                                     std::string& errorMsg,
@@ -446,6 +462,8 @@ static void handle_exception_helper(bool& ret,
     if (richErrorMsg) {
       handle_exception_append_bt(errorMsg, e);
     }
+  } catch (const ScriptAbortForConnClosedException &e) {
+    handle_scriptabort_exception(context);
   } catch (const Exception &e) {
     bool oldRet = ret;
     bool origError = error;
@@ -1947,26 +1965,17 @@ bool hphp_invoke(ExecutionContext *context, const std::string &cmd,
                 context->getCwd().data(), true);
       }
     } catch (const ScriptAbortForConnClosedException &e) {
-      Transport *transport = context->getTransport();
-      if (transport) {
-        Logger::Warning("Script aborted for connection to be closed: "
-          "User(%s:%d), request: %s, Server(%s:%d)",
-          transport->getRemoteAddr(),
-          transport->getRemotePort(),
-          context->getRequestUrl().c_str(),
-          transport->getServerAddr().c_str(),
-          transport->getServerPort());
-      } else {
-        Logger::Warning("Script aborted for connection to be closed: "
-          "request: %s", context->getRequestUrl().c_str());
-      }
+      handle_scriptabort_exception(context);
     } catch (...) {
       handle_invoke_exception(ret, context, errorMsg, error, richErrorMsg);
     }
   }
 
   try {
-    context->onShutdownPreSend();
+    Transport *transport = context->getTransport();
+    if (transport && !transport->isConnTobeClosed()) {
+      context->onShutdownPreSend();
+    }
   } catch (...) {
     handle_invoke_exception(ret, context, errorMsg, error, richErrorMsg);
   }
