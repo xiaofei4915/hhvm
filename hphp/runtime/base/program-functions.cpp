@@ -580,6 +580,8 @@ void handle_destructor_exception(const char* situation) {
       handle_resource_exceeded_exception();
       errorMsg += "(unable to call toString())";
     }
+  } catch (const ScriptAbortForConnClosedException &e) {
+    handle_scriptabort_exception(g_context.getNoCheck());
   } catch (Exception &e) {
     ThreadInfo::s_threadInfo->setPendingException(e.clone());
     errorMsg = situation;
