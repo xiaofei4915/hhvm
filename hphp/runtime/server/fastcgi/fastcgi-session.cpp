@@ -230,7 +230,7 @@ void FastCGISession::dropConnection() {
   notifyThread();
 
   m_sock->closeWithReset();
-  Logger::Warning("Connection(User: %s:%d) closed with reset.",
+  Logger::Error("Connection(User: %s:%d) closed with reset.",
     m_transport->getRemoteAddr(), m_transport->getRemotePort());
 }
 
@@ -501,7 +501,7 @@ void FastCGISession::onRecordImpl(const fcgi::abort_record* rec) {
   }
 
   /**/
-  Logger::Warning("Connection(User: %s:%d) received user abort request.",
+  Logger::Error("Connection(User: %s:%d) received user abort request.",
     m_transport->getRemoteAddr(), m_transport->getRemotePort());
   notifyThread();
 

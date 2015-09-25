@@ -409,7 +409,7 @@ void bump_counter_and_rethrow(bool isPsp) {
 static void handle_scriptabort_exception(ExecutionContext* context) {
   Transport *transport = context->getTransport();
   if (transport) {
-    Logger::Warning("Script aborted for connection to be closed: "
+    Logger::Error("Script aborted for connection to be closed: "
       "User(%s:%d), request: %s, Server(%s:%d)",
       transport->getRemoteAddr(),
       transport->getRemotePort(),
@@ -417,7 +417,7 @@ static void handle_scriptabort_exception(ExecutionContext* context) {
       transport->getServerAddr().c_str(),
       transport->getServerPort());
   } else {
-    Logger::Warning("Script aborted for connection to be closed: "
+    Logger::Error("Script aborted for connection to be closed: "
       "request: %s", context->getRequestUrl().c_str());
   }
 }
