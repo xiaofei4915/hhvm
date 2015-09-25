@@ -350,7 +350,7 @@ void FastCGISession::notifyThread() {
     m_transport->setConnTobeClosed();
   }
 
-  if (RuntimeOption::ThreadJobAbortWithConnClosed && m_job->isTidSet()) {
+  if (RuntimeOption::ThreadJobAbortWithConnClosed && m_job && m_job->isTidSet()) {
     int ret = pthread_kill(m_job->getTid(), SIGQUIT);
     if (ret == ESRCH) {
       Logger::Error("Thread %x is non-existent(Never Created or Already Quit)!",
