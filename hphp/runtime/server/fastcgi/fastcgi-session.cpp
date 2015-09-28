@@ -230,8 +230,12 @@ void FastCGISession::dropConnection() {
   notifyThread();
 
   m_sock->closeWithReset();
-  Logger::Warning("Connection(User: %s:%d) closed with reset.",
-    m_transport->getRemoteAddr(), m_transport->getRemotePort());
+  if (m_transport) {
+    Logger::Error("Connection(User: %s:%d) closed with reset.",
+      m_transport->getRemoteAddr(), m_transport->getRemotePort());
+  } else {
+    Logger::Error("Connection(User: 0:0) closed with reset.");
+  }
 }
 
 void FastCGISession::dumpConnectionState(uint8_t loglevel) { /* nop */ }
@@ -350,7 +354,7 @@ void FastCGISession::notifyThread() {
     m_transport->setConnTobeClosed();
   }
 
-  if (RuntimeOption::ThreadJobAbortWithConnClosed && m_job->isTidSet()) {
+  if (RuntimeOption::ThreadJobAbortWithConnClosed && m_job && m_job->isTidSet()) {
     int ret = pthread_kill(m_job->getTid(), SIGQUIT);
     if (ret == ESRCH) {
       Logger::Error("Thread %x is non-existent(Never Created or Already Quit)!",
@@ -501,8 +505,12 @@ void FastCGISession::onRecordImpl(const fcgi::abort_record* rec) {
   }
 
   /**/
-  Logger::Warning("Connection(User: %s:%d) received user abort request.",
-    m_transport->getRemoteAddr(), m_transport->getRemotePort());
+  if (m_transport) {
+    Logger::Error("Connection(User: %s:%d) received user abort request.",
+      m_transport->getRemoteAddr(), m_transport->getRemotePort());
+  } else {
+    Logger::Error("Connection(User: 0:0) received user abort request.");
+  }
   notifyThread();
 
   writeEndRequest(m_requestId, 1, fcgi::REQUEST_COMPLETE);
