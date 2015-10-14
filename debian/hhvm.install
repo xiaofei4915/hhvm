@@ -1,0 +1,7 @@
+opt/bin/hhvm
+opt/bin/hh_client
+opt/bin/hh_server
+debian/php.ini /opt/etc/hhvm
+debian/server.ini /opt/etc/hhvm
+hphp/hack/src/h2tp/resources/ /opt/share/hhvm/hack/hacklib/
+hphp/hack/editor-plugins/ /opt/share/hhvm/hack/

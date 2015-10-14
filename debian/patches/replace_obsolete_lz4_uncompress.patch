@@ -1,0 +1,33 @@
+Description: LZ4_uncompress is obsolete, breaks build.
+ LZ4_uncompress() has been replaced 1:1 with LZ4_decompress_fast().  When
+ you use an out-of-tree liblz4 r122 or beyond, LZ4_uncompress doesn't exist
+ anymore.  From bottom of lz4.h:
+ [...]
+ /*
+ Obsolete decompression functions
+ These function names are deprecated and should no longer be used.
+ They are only provided here for compatibility with older user programs.
+ - LZ4_uncompress is the same as LZ4_decompress_fast
+ - LZ4_uncompress_unknownOutputSize is the same as LZ4_decompress_safe
+ */
+ int LZ4_uncompress (const char* source, char* dest, int outputSize);
+ [...]
+
+ LZ4_decompress_fast() is already present in third-party's copy.
+
+Author: David Martínez Moreno <ender@debian.org>
+Bug: https://github.com/facebook/hhvm/issues/3610
+Forwarded: no
+Last-Update: 2014-10-18
+
+--- hhvm-3.2.0+dfsg1.orig/hphp/runtime/ext/zlib/ext_zlib.cpp
++++ hhvm-3.2.0+dfsg1/hphp/runtime/ext/zlib/ext_zlib.cpp
+@@ -675,7 +675,7 @@ Variant HHVM_FUNCTION(lz4uncompress, con
+ 
+   String s = String(dsize, ReserveString);
+   char *uncompressed = s.bufferSlice().ptr;
+-  int ret = LZ4_uncompress(compressed_ptr, uncompressed, dsize);
++  int ret = LZ4_decompress_fast(compressed_ptr, uncompressed, dsize);
+ 
+   if (ret <= 0) {
+     return false;

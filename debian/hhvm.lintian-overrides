@@ -1,0 +1,6 @@
+hhvm: spelling-error-in-binary usr/bin/hhvm tEH the
+hhvm: spelling-error-in-binary usr/bin/hhvm taht that
+# PHP has a long tradition of forking off stuff in their own tree.
+# Stock PHP in Debian has this embedded as well.
+hhvm: embedded-library usr/bin/hhvm: libgd
+hhvm: embedded-library usr/bin/hhvm: file

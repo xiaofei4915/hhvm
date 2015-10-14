@@ -1,0 +1,9 @@
+- Add systemd unit and upstart job, possibly reusing code from the php5-fpm package
+- Fix the clean targets as it's not possible to rebuild HHVM after a successful build.
+- Write a manpage for hhvm and hphpize.
+- Write some examples or automatic scripts to create config in Apache/nginx/etc.
+- Finish pfff packaging & provide hackificator/remove_soft_types.
+- Package vim-hack plugin from https://github.com/hhvm/vim-hack.
+- Integrate the hhvm/hh_* man pages into the normal build process instead of having them
+  under debian/.
+- Fix relro flags in hh_client/server binaries.

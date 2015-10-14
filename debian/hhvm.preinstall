@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+if [ "$1" != "configure" ]; then
+    exit 0
+fi
+HHVM_BIN=/opt/bin/hhvm
+if [ -f "$HHVM_BIN" ]; then
+    rm -f $HHVM_BIN.bak
+    cp $HHVM_BIN $HHVM_BIN.bak
+fi

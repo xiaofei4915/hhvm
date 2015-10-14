@@ -1,0 +1,44 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+#export DH_VERBOSE=1
+# To prevent bogus linkage.
+LDFLAGS += -Wl,--as-needed
+# Exported variable to make sure that we don't use cursor control in the tests.
+export TRAVIS = bogus
+
+%:
+	dh $@ --parallel
+
+override_dh_auto_build:
+	# rerun flex/bison to regenerate their output for DFSG reasons
+	./hphp/parser/make-lexer.sh
+	./hphp/parser/make-parser.sh
+	make -j 24
+
+override_dh_auto_configure:
+	printenv
+	echo $(LDFLAGS)
+	dh_auto_configure -- \
+		-DUSE_JSONC=ON \
+		-DCMAKE_INSTALL_PREFIX=/opt/ \
+		-DCMAKE_BUILD_TYPE=Release  \
+		-DMYSQL_UNIX_SOCK_ADDR=/dev/null
+
+
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+override_dh_auto_test:
+	# hphp/hhvm/hhvm hphp/test/run -m jit quick
+	# hphp/hhvm/hhvm hphp/test/run -m interp quick
+endif
+
+override_dh_strip:
+	dh_strip --dbg-package=hhvm-dbg
+
+override_dh_fixperms:
+		dh_fixperms
+		test -d debian/hhvm && \
+			chown www-data:www-data \
+			debian/hhvm/data/log/hhvm || true
+
+.PHONY: override_dh_auto_build override_dh_auto_configure override_dh_auto_test override_dh_strip override_dh_fixperms

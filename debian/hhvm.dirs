@@ -1,0 +1,4 @@
+/opt/etc/hhvm
+/data/log/hhvm
+/var/run/hhvm
+/opt/share

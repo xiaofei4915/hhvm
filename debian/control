@@ -1,0 +1,181 @@
+Source: hhvm
+Section: php
+Priority: optional
+Maintainer: jiangsong.wang <jiangsong.wang@ele.me>
+Uploaders: jiangsong.wang <jiangsong.wang@ele.me>
+Build-Depends: debhelper (>= 9.0.0),
+  autoconf,
+  automake,
+  binutils, 
+  binutils-dev,
+  build-essential,
+  cmake,
+  g++,
+  gawk,
+  git,
+  gperf,
+  libasn1-8-heimdal,
+  libboost-context1.54.0,
+  libboost-context-dev,
+  libboost-dev,
+  libboost-filesystem1.54.0,
+  libboost-filesystem-dev,
+  libboost-program-options1.54.0,
+  libboost-program-options-dev,
+  libboost-regex1.54.0,
+  libboost-regex-dev,
+  libboost-system1.54.0,
+  libboost-system-dev,
+  libboost-thread1.54.0,
+  libboost-thread-dev,
+  libbz2-1.0,
+  libbz2-dev,
+  libc6,
+  libcap2,
+  libcap-dev,
+  libc-client2007e,
+  libc-client2007e-dev,
+  libc-client-dev,
+  libcomerr2, libelf1,
+  libcurl3 (>= 7.28.0),
+  libcurl4-openssl-dev,
+  libdouble-conversion1,
+  libdwarf-dev,
+  libedit2,
+  libedit-dev,
+  libelf-dev,
+  libevent-2.0-5,
+  libevent-dev,
+  libexpat1,
+  libexpat-dev,
+  libfontconfig1,
+  libfreetype6,
+  libgcc1,
+  libgcrypt11,
+  libgd2-xpm-dev,
+  libgd3,
+  libgmp10,
+  libgmp3-dev,
+  libgnutls26,
+  libgoogle-glog0 (>= 0.3.1),
+  libgoogle-glog-dev,
+  libgoogle-perftools-dev,
+  libgpg-error0,
+  libgssapi3-heimdal,
+  libgssapi-krb5-2,
+  libhcrypto4-heimdal,
+  libheimbase1-heimdal,
+  libheimntlm0-heimdal,
+  libhx509-5-heimdal,
+  libiberty-dev,
+  libiconv-hook-dev,
+  libicu52,
+  libicu-dev,
+  libidn11,
+  libinotifytools0-dev,
+  libjemalloc1 (>= 3.0.0),
+  libjemalloc-dev,
+  libjpeg-turbo8,
+  libk5crypto3,
+  libkeyutils1,
+  libkrb5-26-heimdal,
+  libkrb5-3,
+  libkrb5-dev,
+  libkrb5support0,
+  libldap-2.4-2,
+  libldap2-dev,
+  liblz4-1,
+  libmagickwand5,
+  libmagickwand-dev,
+  libmcrypt4,
+  libmcrypt-dev,
+  libmemcached10,
+  libmemcached-dev,
+  libmysqlclient18,
+  libmysqlclient-dev,
+  libncurses-dev,
+  libnotify-dev,
+  libonig2,
+  libonig-dev,
+  libp11-kit0,
+  libpam0g,
+  libpcre3,
+  libpcre3-dev,
+  libpng12-0,
+  libreadline-dev,
+  libroken18-heimdal,
+  librtmp0,
+  libsasl2-2,
+  libsqlite3-0,
+  libsqlite3-dev,
+  libssl1.0.0,
+  libstdc++6,
+  libtasn1-6,
+  libtbb2,
+  libtbb-dev,
+  libtinfo5,
+  libtool,
+  libwind0-heimdal,
+  libx11-6,
+  libxau6,
+  libxcb1,
+  libxdmcp6,
+  libxml2,
+  libxml2-dev,
+  libxpm4,
+  libxslt1.1,
+  libxslt1-dev,
+  libyaml-0-2,
+  libyaml-dev,
+  ocaml-native-compilers,
+  zlib1g,
+  zlib1g-dev
+
+Standards-Version: 3.9.2
+Homepage: http://hhvm.com
+Vcs-Git: http://github.com/eleme/hhvm.git
+Vcs-Browser: https://github.com/eleme/hhvm/tree/ELEME-3.6;a=summary
+Package: hhvm
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: HipHop Virtual Machine, a JIT replacement for PHP - main runtime
+ HHVM is an open-source virtual machine designed for executing programs
+ written in Hack and PHP. HHVM uses a just-in-time (JIT) compilation
+ approach to achieve superior performance while maintaining the development
+ flexibility that PHP provides.
+ .
+ For the majority of your programs HHVM should be a drop-in replacement for
+ the usual PHP interpreter/engine.
+
+Package: hhvm-dbg
+Architecture: amd64
+Depends: hhvm (= ${binary:Version}), ${misc:Depends}
+Section: debug
+Priority: extra
+Description: HipHop Virtual Machine, a JIT replacement for PHP - debugging symbols
+ HHVM is an open-source virtual machine designed for executing programs
+ written in Hack and PHP. HHVM uses a just-in-time (JIT) compilation
+ approach to achieve superior performance while maintaining the development
+ flexibility that PHP provides.
+ .
+ For the majority of your programs HHVM should be a drop-in replacement for
+ the usual PHP interpreter/engine.
+ .
+ This package provides the debugging symbols for HHVM.
+
+Package: hhvm-dev
+Architecture: amd64
+Depends: ${misc:Depends}, cmake
+Section: libdevel
+Priority: extra
+Description: HipHop Virtual Machine, a JIT replacement for PHP - development files
+ HHVM is an open-source virtual machine designed for executing programs
+ written in Hack and PHP. HHVM uses a just-in-time (JIT) compilation
+ approach to achieve superior performance while maintaining the development
+ flexibility that PHP provides.
+ .
+ For the majority of your programs HHVM should be a drop-in replacement for
+ the usual PHP interpreter/engine.
+ .
+ This package provides the header & build system files needed for compiling
+ HHVM extensions.

@@ -1,0 +1,70 @@
+hhvm (3.6.2-2) stable; urgency=medium
+  * Add more logs and a switch hhvm.server.thread_job_abort_with_conn_closed
+
+ -- David Martínez Moreno <ender@debian.org>  Tue, 21 Oct 2014 03:19:54 -0700
+
+hhvm (3.2.0+dfsg1-2) unstable; urgency=medium
+
+   [ Faidon Liambotis ]
+   * Fix the build system to be able to build a release build but with
+     debugging symbols (which we subsequently strip into hhvm-dbg), and pass
+     -DCMAKE_BUILD_TYPE=RelWithDebInfo to configure.
+
+  [ David Martínez Moreno ]
+  * Remove the chmod 750 on /var/log/hhvm as it's really an error on the HHVM
+    packaging.
+  * debian/patches:
+    - disable_quicklz_code: Disable the qlz* primitives, as they are
+      GPL-licensed code linked to PHP-licensed one.
+    - static_linking_against_libbfd: Static linking against libbfd per
+      binutils-dev, backported from HEAD.
+    - add_additional_includes_imagemagick: New ImageMagick broke the build,
+      so add the arch includes to the build.
+    - replace_obsolete_lz4_uncompress: In lz4 r122 or beyond, LZ4_uncompress()
+      has been removed after being deprecaded.
+  * debian/copyright: Fixed some mistakes discovered with latest lintian.
+  * debian/control: Bumped Standards-Version to to 3.9.6 (no changes)
+  * Added an additional override for lintian on PHP license, with comment.
+  * Added a manpage for hphpize.
+
+ -- David Martínez Moreno <ender@debian.org>  Tue, 21 Oct 2014 03:19:54 -0700
+
+hhvm (3.2.0+dfsg1-1) unstable; urgency=low
+
+  [ David Martínez Moreno ]
+  * Initial release.  Lots of thanks to Faidon Liambotis, without whom this
+    would have been way worse than it was.  This has been a many-month effort
+    and he was pushing all over the place.  Also I'm extending my thanks to
+    my coworker at Facebook Paul Tarjan to make me not forget about HHVM. I
+    can't believe it's done! (closes: #727085).
+  * Prepared a new 3.2.0 release without libzip, lz4 and such, and update
+    TODO.  There's a script in debian/repack to make new tarballs from the
+    upstream ones.
+  * Added debian/repack to create DFSG-compliant tarballs.
+  * Added debian/README.source to cover the above procedure.
+  * debian/rules: Build the package with -Wl,--as-needed to remove a couple of
+    bogus dependencies,
+  * debian/patches:
+    - fix_freetype_include: Bad include in libgd.
+    - use_system_libzip: Use the system's libzip.
+    - typos: Lots of typos, most of them detected by lintian. Added the
+      false positives to a lintian override file.
+    - use_system_libsqlite: Use the system's libsqlite3.
+    - fix_hphp_lexer: Add a missing semicolon in the HPHP lexer, already
+      merged upstream.
+    - link_libiconv_hook: The iconv library in Debian is called libiconv_hook,
+      so change the CMake detection script to account for that.
+    - fix_ldflags: Fix LDFLAGS injection of hardening flags.
+  * Copied from upstream git debian/hhvm.1.ronn and converted for now to
+    troff, and imported manually too hh_client/hh_server into debian/.
+  * debian/postinst: Make HHVM an alternative with score 40 for php.
+
+  [ Faidon Liambotis ]
+  * debian/patches:
+    - use_system_lz4: Use the system's liblz4.
+    - use_system_double-conversion: Use the system's double-conversion
+      library and remove the one in third-party.
+    - public_headers_system: add header files from hphp/system/ too as at
+      least systemlib.h is needed to build an extension.
+
+ -- David Martínez Moreno <ender@debian.org>  Fri, 05 Sep 2014 15:55:18 -0700
