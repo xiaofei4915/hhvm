@@ -7348,6 +7348,10 @@ void interpOne##opcode(ActRec* ar, Cell* sp, Offset pcOff) {            \
           "interpOne" #opcode " before (fp,sp)", vmfp(), vmsp());       \
   assert(*reinterpret_cast<const Op*>(vmpc()) == Op::opcode);           \
   Stats::inc(Stats::Instr_InterpOne ## opcode);                         \
+  Transport *transport = g_context->getTransport();                     \
+  if (transport && transport->isConnTobeClosed()) {                     \
+    throw ScriptAbortForConnClosedException();                          \
+  }                                                                     \
   if (Trace::moduleEnabled(Trace::interpOne, 1)) {                      \
     static const StringData* cat = makeStaticString("interpOne");       \
     static const StringData* name = makeStaticString(#opcode);          \
@@ -7426,6 +7430,11 @@ void dispatchImpl() {
     ONTRACE(1,                                                          \
             Trace::trace("dispatch: %d: %s\n", pcOff(),                 \
                          opcodeToName(op)));                            \
+    Transport *transport = g_context->getTransport();                   \
+    if (transport && transport->isConnTobeClosed()) {                   \
+      throw ScriptAbortForConnClosedException();                        \
+      return;                                                           \
+    }                                                                   \
     goto *optab[uint8_t(op)];                                           \
 } while (0)
 
